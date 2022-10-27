@@ -40,15 +40,15 @@ def get():
 def post():
     pass
 
-@app.route('/api/v1.0/get/<int:id>/api', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/v1.0/get/<int:id>/api', methods=['GET'])
 @require_appkey
 def get_post(id):
     pass
-@app.route('/api/v1.0/put/<int:id>/api', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/v1.0/put/<int:id>/api', methods=['PUT'])
 @require_appkey
 def put_post(id):
     pass
-@app.route('/api/v1.0/delete/<int:id>/api', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/v1.0/delete/<int:id>/api', methods=['DELETE'])
 @require_appkey
 def delete_post(id):
     pass
