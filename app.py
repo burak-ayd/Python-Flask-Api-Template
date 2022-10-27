@@ -5,17 +5,14 @@ import urllib.request
 import generate_api_key
 from functools import wraps
 
-external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
-
-host=external_ip
-
 app = Flask(__name__)
 
+external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+host=external_ip
 PROJECT_HOME = '/var/www/html'
 UPLOAD_FOLDER = '{}/uploads/'.format(PROJECT_HOME)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def get_api_key():
@@ -23,10 +20,7 @@ def get_api_key():
 
 def require_appkey(view_function):
     @wraps(view_function)
-    # the new, post-decoration function. Note *args and **kwargs here.
     def decorated_function(*args, **kwargs):
-        # with open('api.key', 'r') as apikey:
-        #     key=apikey.read().replace('\n', '')
         if request.args.get('api_key') and request.args.get('api_key') == get_api_key():
             return view_function(*args, **kwargs)
         else:
@@ -64,11 +58,6 @@ app.route('/api/v1.0/upload/api', methods=['POST', 'GET'])
 def upload_file():
     if request.method =='POST':
         try:
-            # check if the post request has the file part
-            # if 'files[]' not in request.files:
-            #     resp = jsonify({'message' : 'No file part in the request'})
-            #     resp.status_code = 400
-            #     return resp
             file = request.files.get('files[]')
             _tmp=str(uuid.uuid4())
             ext=file.filename.rsplit('.', 1)[1].lower()
@@ -81,7 +70,6 @@ def upload_file():
                 success = True
             else:
                 errors[file.filename] = 'File type is not allowed'
-
             if success and errors:
                 errors['message'] = 'File(s) successfully uploaded'
                 resp = jsonify(errors)
